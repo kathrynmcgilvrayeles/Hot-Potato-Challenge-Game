@@ -309,9 +309,26 @@
         passBombBtn.style.display = 'block';
         nextRoundBtn.style.display = 'none';
         
-        // Reset potato visual
-        potatoVisualDiv.style.fontSize = '1em'; // reset font size if changed
-        potatoVisualDiv.querySelector('svg').style.display = 'block'; // Show SVG
+        // Restore original potato visual SVG because endRound() replaces it with "SPLAT!"
+        const originalSVG = `
+        <svg width="150" height="120" viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(0 -10)">
+                <!-- Heat Waves -->
+                <path class="heat-wave" d="M 60 35 Q 65 25, 70 35 T 80 35" stroke="var(--brand-red)" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay: 0s;"/>
+                <path class="heat-wave" d="M 85 30 Q 90 20, 95 30 T 105 30" stroke="var(--brand-red)" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay: 0.5s;"/>
+                
+                <!-- Potato Body -->
+                <path d="M 30 110 C 10 90, 15 50, 50 40 C 85 30, 120 40, 135 70 C 150 100, 120 125, 80 125 C 40 125, 40 120, 30 110 Z" fill="var(--potato-color)" stroke="var(--potato-dark)" stroke-width="4"/>
+                
+                <!-- Face -->
+                <circle cx="65" cy="75" r="8" fill="white" stroke="var(--potato-dark)" stroke-width="2"/>
+                <circle cx="65" cy="75" r="3" fill="var(--potato-dark)"/>
+                <circle cx="105" cy="75" r="8" fill="white" stroke="var(--potato-dark)" stroke-width="2"/>
+                <circle cx="105" cy="75" r="3" fill="var(--potato-dark)"/>
+                <ellipse cx="85" cy="105" rx="10" ry="12" fill="var(--potato-dark)"/>
+            </g>
+        </svg>`;
+        potatoVisualDiv.innerHTML = originalSVG;
         potatoVisualDiv.classList.add('pulse');
 
         promptP.textContent = roundScenarios.pop(); // Use the next unique scenario for the round
@@ -333,7 +350,6 @@
         clearInterval(gameInterval);
         // playExplosionSound(); // Optional: can be noisy in a training room
         potatoVisualDiv.classList.remove('pulse');
-        potatoVisualDiv.querySelector('svg').style.display = 'none'; // Hide SVG
 
         // Display 'SPLAT!'
         const splatText = document.createElement('span');
@@ -440,7 +456,4 @@
 </script>
 </body>
 </html>
-
-
-
 
