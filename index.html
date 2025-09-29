@@ -29,13 +29,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Use min-height to allow content to expand */
             margin: 0;
             background-color: var(--brand-grey-light);
             color: var(--brand-black);
             text-align: center;
             padding: 20px;
-            overflow: hidden; /* Hide confetti overflow */
+            /* overflow: hidden; -- Removed from here, will be handled by a class */
         }
 
         .container {
@@ -47,6 +47,11 @@
             max-width: 850px; /* Increased max-width */
             border-top: 8px solid var(--brand-red);
             position: relative;
+        }
+
+        /* This new class will hide overflow only when needed for the confetti */
+        body.winner-active {
+            overflow: hidden;
         }
 
         h1 {
@@ -337,7 +342,7 @@
         currentPlayerIndex = 0;
         updateCurrentPlayer();
 
-        const explosionTime = Math.floor(Math.random() * 15000) + 10000; // 10-25 seconds
+        const explosionTime = Math.floor(Math.random() * 15000) + 5000; // 5-20 seconds
         const startTime = Date.now();
         gameInterval = setInterval(() => {
             if (Date.now() - startTime >= explosionTime) {
@@ -379,6 +384,7 @@
     function showWinner() {
         gameBoardDiv.style.display = 'none';
         winnerScreenDiv.style.display = 'block';
+        document.body.classList.add('winner-active'); /* Add class to hide confetti overflow */
 
         players.sort((a, b) => a.losses - b.losses);
         const minLosses = players[0].losses;
@@ -435,6 +441,7 @@
         currentRound = 0;
         winnerScreenDiv.style.display = 'none';
         playerSetupDiv.style.display = 'block';
+        document.body.classList.remove('winner-active'); /* Remove class to restore scrolling */
         updatePlayerList();
         // Clear old confetti
         document.querySelectorAll('.confetti').forEach(e => e.remove());
@@ -456,4 +463,5 @@
 </script>
 </body>
 </html>
+
 
